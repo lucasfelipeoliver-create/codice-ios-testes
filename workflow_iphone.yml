@@ -1,0 +1,20 @@
+# Vai para .github/workflows/iphone.yml quando a conta tiver a permissão "workflow" (gh auth refresh -s workflow).
+name: Safari do iPhone (Simulador)
+on:
+  workflow_dispatch:
+  push:
+    paths: ["camada/**", "preparar_site.py", "fotos_iphone.sh"]
+jobs:
+  fotos:
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Monta o Códice publicado com a camada iPhone
+        run: python3 preparar_site.py
+      - name: Safari real no Simulador — capturas por estado
+        run: bash fotos_iphone.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fotos-iphone
+          path: fotos/
